@@ -1,16 +1,7 @@
-import {useCallback, useState} from 'react';
+import {MouseEvent, useCallback, useState} from 'react';
 import {apollo} from "../apollo";
 import {gql, useQuery} from "@apollo/client";
 import {useCallbackRef} from "use-callback-ref";
-
-interface PokemonSlice {
-  num: string;
-  species: string;
-  sprite: string;
-  backSprite: string;
-  flavorTexts: { flavor:string }[];
-  bulbapediaPage: string;
-}
 
 interface SpeciesListProps {
   fuzzy: string;
@@ -63,6 +54,15 @@ export default function SpeciesList({ fuzzy }: SpeciesListProps) {
     }
   });
 
+  const showGoogleWindow = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    window.open('https://google.com', '_blank');
+  };
+
+  const showBulpadiaPage = (e: MouseEvent<HTMLAnchorElement>, pokemon: PokemonSlice) => {
+    e.stopPropagation();
+    window.open(pokemon.bulbapediaPage, '_blank');
+  }
   /**
    * TODO: Need better way to prevent re-rendering
    */
@@ -75,7 +75,7 @@ export default function SpeciesList({ fuzzy }: SpeciesListProps) {
       {pokemons &&
         <div className="flex flex-row flex-wrap gap-5 justify-around">
           {pokemons.map((pokemon, index) =>
-            <div className="card w-full md:w-1/4 flex flex-row" key={pokemon.species + '-' + index} >
+            <div className="card w-full md:w-1/4 flex flex-row cursor-pointer" key={pokemon.species + '-' + index} onClick={showGoogleWindow}>
               <div className="bg-white w-full h-full flex flex-col items-center px-2 pb-2 pt-1" style={{"margin": "-1px"}}>
                 <div className="flex flex-row justify-center items-center grow">
                   <img src={pokemon.sprite} />
@@ -88,7 +88,7 @@ export default function SpeciesList({ fuzzy }: SpeciesListProps) {
                 }
 
                 {pokemon.bulbapediaPage &&
-                <a className="bg-black text-white w-1/2 m-auto rounded-3xl py-2 font-bold mt-3" href={pokemon.bulbapediaPage} target="_blank">Bulpadia</a>
+                  <a className="bg-black text-white w-1/2 m-auto rounded-3xl py-2 font-bold mt-3" onClick={(e) => showBulpadiaPage(e, pokemon)}>Bulpadia</a>
                 }
               </div>
 

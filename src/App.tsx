@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className="App">
-      <input className="border-2 my-2" type="text" onChange={debounceInput} placeholder="Input a pokemon"/>
+      <input className="border-2 my-2 p-1" type="text" onChange={debounceInput} placeholder="Input a pokemon"/>
 
       {name.length === 0 &&
         <div>Must input a pokemon to see pokemon</div>
