@@ -9,6 +9,7 @@ interface PokemonSlice {
   sprite: string;
   backSprite: string;
   flavorTexts: { flavor:string }[];
+  bulbapediaPage: string;
 }
 
 interface SpeciesListProps {
@@ -23,6 +24,7 @@ const GET_FUZZY_POKEMON = gql`
       sprite
       backSprite
       flavorTexts { flavor }
+      bulbapediaPage
     }
   }
 `;
@@ -71,18 +73,28 @@ export default function SpeciesList({ fuzzy }: SpeciesListProps) {
   return (
     <div className="SpeciesList">
       {pokemons &&
-        <div className="flex flex-row flex-wrap gap-5">
-          {pokemons.map((pokemon) =>
-            <div className="card w-1/4 cursor-pointer flex flex-col" key={pokemon.species}>
-              <div className="flex flex-row justify-center items-center grow">
-                <img src={pokemon.sprite} />
+        <div className="flex flex-row flex-wrap gap-5 justify-around">
+          {pokemons.map((pokemon, index) =>
+            <div className="card w-full md:w-1/4 flex flex-row" key={pokemon.species + '-' + index} >
+              <div className="bg-white w-full h-full flex flex-col items-center px-2 pb-2 pt-1" style={{"margin": "-1px"}}>
+                <div className="flex flex-row justify-center items-center grow">
+                  <img src={pokemon.sprite} />
+                </div>
+
+                <div className="text-xl font-bold">{pokemon.species}</div>
+
+                {pokemon.flavorTexts.length > 0 &&
+                <div className="mt-3">{pokemon.flavorTexts[0].flavor}</div>
+                }
+
+                {pokemon.bulbapediaPage &&
+                <a className="bg-black text-white w-1/2 m-auto rounded-3xl py-2 font-bold mt-3" href={pokemon.bulbapediaPage} target="_blank">Bulpadia</a>
+                }
               </div>
 
-              <div>{pokemon.species}</div>
+              <div className="bg-black w-4">
 
-              {pokemon.flavorTexts.length > 0 &&
-              <div>{pokemon.flavorTexts[0].flavor}</div>
-              }
+              </div>
             </div>
           )}
         </div>
