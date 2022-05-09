@@ -5,14 +5,10 @@ import debounce from "lodash.debounce";
 
 function App() {
   const [name, setName] = useState('');
-  const changeHandler = (e:ChangeEvent<HTMLInputElement>) => {
-    console.log('hello?', e.target.value)
-    console.log(e);
-    setName(e.target.value)
-  };
-
   const debounceInput = useMemo(
-    () => debounce(changeHandler, 500)
+    () => debounce(
+      (e:ChangeEvent<HTMLInputElement>) => setName(e.target.value)
+    , 500)
   ,[])
 
   return (
